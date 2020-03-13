@@ -1,0 +1,9 @@
+main: fr.bobsmil3y.gamerulemanager.Main
+name: Gamerule-Manager
+version: 1.0.0
+author: BoBsmil3Y
+api: 1.15.2
+commands:
+  gmanager:
+    description: Use to manage you gamerule world.
+    permission: gamerulemanager.admin

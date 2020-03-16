@@ -1,5 +1,7 @@
 package fr.bobsmil3y.gamerulemanager.listeners;
 
+import fr.bobsmil3y.gamerulemanager.GameruleManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
@@ -39,9 +41,18 @@ public class ClickEvent implements Listener{
 				GameRule<Boolean> gamerule = null;
 				gamerule = (GameRule<Boolean>) gamerule.getByName(name);
 				
+				
 				Boolean value = world.getGameRuleValue(gamerule);
 				
 				world.setGameRule(gamerule, !value);
+				ItemStack itemChanged = GameruleManager.changeLoreBoolean(item, value);
+				inv.setItem(event.getSlot(), itemChanged);
+				
+				/*
+				 * 
+				 * Ouvrir une nouvelle instance d'inventaire. On recrée l'inventaire
+				 * 
+				 * */
 				
 			} else if(item.getType() == Material.PAPER ) {
 				

@@ -21,9 +21,30 @@ public class ChatEvent implements Listener{
 		
 		if(player.getName().equals(editor.getName())) {
 			
-			System.out.println("même pseudo");
+			event.setCancelled(true);
 			
-		} else System.out.println("pas le même pseudo");
+			
+			
+			try {
+				
+				String message = event.getMessage();
+				int value = Integer.parseInt(message);
+				
+				System.out.println(value);
+				//ClickEvent.removeEditor();
+				System.out.println("Editor remove, he can talk");
+				
+			} catch (NumberFormatException e) {
+				
+				System.out.println(e);
+				player.sendMessage("§cYou have to put a correct number !");
+				
+			}
+			
+			
+			
+			
+		} else System.out.println("pas le même pseudo ou il n'est plus en train d'éditer");
 		
 		
 	}

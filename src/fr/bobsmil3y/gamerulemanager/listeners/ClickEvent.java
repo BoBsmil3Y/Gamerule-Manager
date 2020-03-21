@@ -1,6 +1,7 @@
 package fr.bobsmil3y.gamerulemanager.listeners;
 
 import fr.bobsmil3y.gamerulemanager.GameruleManager;
+import net.md_5.bungee.api.chat.TextComponent;
 
 import java.util.HashMap;
 
@@ -61,15 +62,14 @@ public class ClickEvent implements Listener{
 				
 				GameRule<Integer> gamerule = null;
 				gamerule = (GameRule<Integer>) gamerule.getByName(name);
+				this.editor = player;
 				
+				player.closeInventory();
 				
 				player.sendMessage(ChatColor.GRAY + "Default value : " + ChatColor.AQUA + world.getGameRuleDefault(gamerule));
 				player.sendMessage(ChatColor.GRAY + "Actual value : " + ChatColor.AQUA + world.getGameRuleValue(gamerule));
 				player.sendMessage(ChatColor.GRAY + "Write the value you want to put");
-				
-				this.editor = player;
-				
-				player.closeInventory();
+
 								
 			}
 		}
@@ -82,7 +82,7 @@ public class ClickEvent implements Listener{
 				
 	}
 	
-	public void removeEditor() {
+	public static void removeEditor() {
 		
 		ClickEvent.editor = null;
 		

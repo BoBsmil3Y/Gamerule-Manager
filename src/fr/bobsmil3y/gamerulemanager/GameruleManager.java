@@ -117,10 +117,9 @@ public class GameruleManager implements CommandExecutor {
 		List<String> loreList = null;
 		
 		if(bool) {
-			loreList = Arrays.asList("§r ", "§7§lCurrent value : §c§lfalse", "§r ", "§7Click to change the value", "§7to §atrue§7.", "§r ");
-		} else {
-			loreList = Arrays.asList("§r ", "§7§lCurrent value : §a§ltrue", "§r ", "§7Click to change the value", "§7to §cfalse§7.", "§r ");
-		}
+			loreList = Arrays.asList("§r ", "§7§lCurrent value : §c§lfalse", "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
+		} else loreList = Arrays.asList("§r ", "§7§lCurrent value : §a§ltrue", "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
+		
 		
 		lore.addAll(loreList);
 		

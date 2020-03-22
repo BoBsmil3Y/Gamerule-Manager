@@ -41,6 +41,7 @@ public class ChatEvent implements Listener{
 				
 				ClickEvent.removeEditor();
 				
+				
 				new BukkitRunnable() {
 			        
 		            @Override

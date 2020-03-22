@@ -66,6 +66,8 @@ public class ClickEvent implements Listener{
 				player.sendMessage(ChatColor.GRAY + "Actual value : " + ChatColor.AQUA + world.getGameRuleValue(gamerule));
 				player.sendMessage(ChatColor.GRAY + "Write the value you want to put");
 				
+				
+				
 			}
 		}
 		

@@ -13,8 +13,7 @@ public class Main extends JavaPlugin {
 		
         getCommand("gmanager").setExecutor(new GameruleManager());
         getServer().getPluginManager().registerEvents(new ClickEvent(), this);
-        getServer().getPluginManager().registerEvents(new ChatEvent(), this);
-		
+        getServer().getPluginManager().registerEvents(new ChatEvent(this), this);
 	
 	}
 	

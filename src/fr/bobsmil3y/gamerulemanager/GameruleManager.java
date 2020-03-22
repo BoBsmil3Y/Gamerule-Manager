@@ -21,6 +21,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class GameruleManager implements CommandExecutor {
 
+	private static Inventory inventory;
+	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
@@ -45,7 +47,7 @@ public class GameruleManager implements CommandExecutor {
 	
 	public Inventory createMenu(Player player) {
 		
-		Inventory inv = Bukkit.createInventory(null, 45, ChatColor.DARK_GRAY + "Gamerule Manager");
+		inventory = Bukkit.createInventory(null, 45, ChatColor.DARK_GRAY + "Gamerule Manager");
 		
 		GameRule<?> gamerule = null;
 		String gamerulesNames[] = player.getWorld().getGameRules();
@@ -58,29 +60,28 @@ public class GameruleManager implements CommandExecutor {
 			
 			// If the GameRule is a Boolean type
 			if(type.equals("class java.lang.Boolean")) {
-				inv.addItem(createItemBoolean(player, gamerule, name));
+				inventory.addItem(createItemBoolean(player, gamerule, name));
 			// If the GameRule is a Integer type
 			} else if (type.equals("class java.lang.Integer")) {
-				inv.addItem(createItemInteger(player, gamerule, name));
+				inventory.addItem(createItemInteger(player, gamerule, name));
 			}
-			
+						
 		}
 		
-		return inv;
+		return inventory;
 	}
 	
-	public ItemStack createItemBoolean(Player player, GameRule<?> gamerule, String name) {
+	public static ItemStack createItemBoolean(Player player, GameRule<?> gamerule, String name) {
 		
 		boolean bool = (boolean) player.getWorld().getGameRuleValue(gamerule);
 		
 		ArrayList<String> lore = new ArrayList<String>();
 		List<String> loreListBool = null;
 		
-		if (bool) {
-			loreListBool = Arrays.asList("§r ", "§7§lCurrent value : §a§l" + bool , "§r ", "§7Click to change the value", "§7to §c" + (!bool), "§r ");
-		}else {
-			loreListBool = Arrays.asList("§r ", "§7§lCurrent value : §c§l" + bool, "§r ", "§7Click to change the value", "§7to §a"  + (!bool),  "§r ");
-		}
+		if(bool) {
+			loreListBool = Arrays.asList("§r ", "§7§lCurrent value : §c§lfalse", "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
+		} else loreListBool = Arrays.asList("§r ", "§7§lCurrent value : §a§ltrue", "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
+		
 		lore.addAll(loreListBool);
 		
 		ItemStack item = new ItemStack(Material.TRIPWIRE_HOOK, 1);
@@ -92,7 +93,7 @@ public class GameruleManager implements CommandExecutor {
 		return item;
 	}
 	
-	public ItemStack createItemInteger(Player player, GameRule<?> gamerule, String name) {
+	public static ItemStack createItemInteger(Player player, GameRule<?> gamerule, String name) {
 		
 		int integer = (int) player.getWorld().getGameRuleValue(gamerule);
 		
@@ -120,7 +121,6 @@ public class GameruleManager implements CommandExecutor {
 			loreList = Arrays.asList("§r ", "§7§lCurrent value : §c§lfalse", "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
 		} else loreList = Arrays.asList("§r ", "§7§lCurrent value : §a§ltrue", "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
 		
-		
 		lore.addAll(loreList);
 		
 		meta.setLore(lore);
@@ -129,4 +129,8 @@ public class GameruleManager implements CommandExecutor {
 		return item;
 	}
 
+	public static Inventory getInventory() {
+		return inventory;
+	}
+	
 }

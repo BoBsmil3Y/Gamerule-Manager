@@ -1,22 +1,16 @@
 package fr.bobsmil3y.gamerulemanager.listeners;
 
 import fr.bobsmil3y.gamerulemanager.GameruleManager;
-import net.md_5.bungee.api.chat.TextComponent;
 
-import java.util.HashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.data.Openable;
-import org.bukkit.block.data.type.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 public class ClickEvent implements Listener{
 
 	private static Player editor;
+	private static ItemStack item;
 	
 	@SuppressWarnings("unchecked")
 	@EventHandler
@@ -63,14 +58,14 @@ public class ClickEvent implements Listener{
 				GameRule<Integer> gamerule = null;
 				gamerule = (GameRule<Integer>) gamerule.getByName(name);
 				this.editor = player;
+				this.item = item;
 				
 				player.closeInventory();
 				
 				player.sendMessage(ChatColor.GRAY + "Default value : " + ChatColor.AQUA + world.getGameRuleDefault(gamerule));
 				player.sendMessage(ChatColor.GRAY + "Actual value : " + ChatColor.AQUA + world.getGameRuleValue(gamerule));
 				player.sendMessage(ChatColor.GRAY + "Write the value you want to put");
-
-								
+				
 			}
 		}
 		

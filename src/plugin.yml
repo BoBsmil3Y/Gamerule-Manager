@@ -1,10 +1,15 @@
-main: fr.bobsmil3y.gamerulemanager.Main
 name: Gamerule-Manager
 version: 1.0.0
+main: fr.bobsmil3y.gamerulemanager.Main
 author: BoBsmil3Y
 description: A plugin to show and manage easily your world gamerule.
-api: 1.15.2
+api-version: 1.15
 commands:
-  gmanager:
+  gamerulemanager:
     description: Use to manage you gamerule world.
+    aliases: [gman, gmanager]
     permission: gamerulemanager.admin
+permissions:
+  gamerulemanager.admin:
+    description: Allows you to do /gmanager command.
+    default: op

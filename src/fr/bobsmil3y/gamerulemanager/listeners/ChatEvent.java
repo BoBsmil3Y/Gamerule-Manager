@@ -3,6 +3,9 @@ package fr.bobsmil3y.gamerulemanager.listeners;
 import fr.bobsmil3y.gamerulemanager.GameruleManager;
 import fr.bobsmil3y.gamerulemanager.Main;
 import fr.bobsmil3y.gamerulemanager.listeners.ClickEvent;
+
+import org.bukkit.GameRule;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,9 +26,7 @@ public class ChatEvent implements Listener{
 		Player player = event.getPlayer();
 		
 		if(! player.hasPermission("gamerulemanager.admin")) return;
-		
-		System.out.println("Il a la permission");
-		
+				
 		Player editor = (Player) ClickEvent.getEditor();
 		
 		if(editor == null) return;
@@ -37,29 +38,40 @@ public class ChatEvent implements Listener{
 			try {
 				
 				String message = event.getMessage();
+				if(message.equals("exit")) {
+					player.sendMessage("§cEdit cancel");
+					ClickEvent.removeEditor();
+					ClickEvent.removeGamerule();
+					return;
+				}
 				int value = Integer.parseInt(message);
-				
+
+				GameRule<Integer> gamerule = ClickEvent.getGamerule();
+				World world = player.getWorld();
+				world.setGameRule(gamerule, value);
 				ClickEvent.removeEditor();
-				
+				ClickEvent.removeGamerule();
+				player.sendMessage("§aValue changed with succes !");
 				
 				new BukkitRunnable() {
 			        
 		            @Override
 		            public void run() {
-		            	player.openInventory(GameruleManager.getInventory());
+		            	player.openInventory(GameruleManager.createMenu(player));
 		            }
 		            
-		        }.runTaskLater(this.plugin, 10);
-		        
+		        }.runTaskLater(this.plugin, 5);
 				
+		        
 			} catch (NumberFormatException e) {
 				
 				System.out.println(e);
-				player.sendMessage("§cYou have to put a correct number !");
+				player.sendMessage("§cYou have to put a correct number ! Only integer is allow.");
 				
 			}
 
-		} else System.out.println("pas le même pseudo ou il n'est plus en train d'éditer");
+			
+		}
 		
 		
 	}

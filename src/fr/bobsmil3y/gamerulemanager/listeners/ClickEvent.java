@@ -19,6 +19,7 @@ public class ClickEvent implements Listener{
 
 	private static Player editor;
 	private static ItemStack item;
+	private static GameRule<Integer> gamerule;
 	
 	@SuppressWarnings("unchecked")
 	@EventHandler
@@ -28,43 +29,46 @@ public class ClickEvent implements Listener{
 		Player player = (Player) event.getWhoClicked();
 		Inventory inv = event.getInventory();
 		InventoryView view = event.getView();
-		ItemStack item = event.getCurrentItem();
+		ItemStack currentItem = event.getCurrentItem();
 		World world = player.getWorld();
 		
-		
-		if(item == null) return;
+		if(currentItem == null) return;
 		
 		if(view.getTitle().contentEquals(ChatColor.DARK_GRAY + "Gamerule Manager")) {
 			
 			event.setCancelled(true);
 			
-			String name = item.getItemMeta().getDisplayName().substring(4);
+			if(! currentItem.hasItemMeta()) return;
 			
-			if(item.getType() == Material.TRIPWIRE_HOOK ) {
+			String name = currentItem.getItemMeta().getDisplayName().substring(4);
+			
+			
+			if(currentItem.getType() == Material.TRIPWIRE_HOOK ) {
 				// Boolean
-				
 				GameRule<Boolean> gamerule = null;
 				gamerule = (GameRule<Boolean>) gamerule.getByName(name);
-				
+
 				Boolean value = world.getGameRuleValue(gamerule);
+				Boolean defaultValue = world.getGameRuleDefault(gamerule);
 				
 				world.setGameRule(gamerule, !value);
-				ItemStack itemChanged = GameruleManager.changeLoreBoolean(item, value);
+				ItemStack itemChanged = GameruleManager.changeLoreBoolean(currentItem, value, defaultValue);
+
 				inv.setItem(event.getSlot(), itemChanged);
-				
-			} else if(item.getType() == Material.PAPER ) {
+			} else if(currentItem.getType() == Material.PAPER ) {
 				// Integer
 				
 				GameRule<Integer> gamerule = null;
 				gamerule = (GameRule<Integer>) gamerule.getByName(name);
 				this.editor = player;
 				this.item = item;
+				this.gamerule = gamerule;
 				
 				player.closeInventory();
 				
 				player.sendMessage(ChatColor.GRAY + "Default value : " + ChatColor.AQUA + world.getGameRuleDefault(gamerule));
 				player.sendMessage(ChatColor.GRAY + "Actual value : " + ChatColor.AQUA + world.getGameRuleValue(gamerule));
-				player.sendMessage(ChatColor.GRAY + "Write the value you want to put");
+				player.sendMessage(ChatColor.GRAY + "Write the value you want to put. Type 'exit' if you want to cancel.");
 				
 				
 				
@@ -73,16 +77,20 @@ public class ClickEvent implements Listener{
 		
 	}
 	
-	public static Player getEditor() {
-		
-		return editor;
-				
+	public static Player getEditor() {	
+		return editor;	
 	}
 	
 	public static void removeEditor() {
-		
-		ClickEvent.editor = null;
-		
+		editor = null;
+	}
+	
+	public static GameRule<Integer> getGamerule(){
+		return gamerule;
+	}
+	
+	public static void removeGamerule() {
+		gamerule = null;
 	}
 	
 }

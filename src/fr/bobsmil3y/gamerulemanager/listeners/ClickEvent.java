@@ -15,14 +15,39 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * 
+ * Event
+ * Trigger when an item is clicked in an inventory.
+ * 
+ * @author BoBsmil3Y
+ * @version 1.0
+ */
+
 public class ClickEvent implements Listener{
 	
+	/**
+	 * Used to store the editor who's modifying.
+	 * 
+	 * @see ClickEvent#getEditor()
+	 * @see ClickEvent#removeEditor()
+	 * */
 	private static Player editor;
-	@SuppressWarnings("unused")
-	private static ItemStack item;
+	/**
+	 * Used to store the gamerule to modify.
+	 * 
+	 * @see ClickEvent#getGamerule()
+	 * @see ClickEvent#removeGamerule()
+	 * */
 	private static GameRule<Integer> gamerule;
 	
-	@SuppressWarnings("unchecked")
+	
+	/**
+	 * Called functions depends on the item clicked.
+	 * Used with : REDSTONE, SPRUCE_DOOR, LEVER, PAPER. 
+	 * 
+	 * @param event
+	 * */
 	@EventHandler
 	public void onClickEvent (InventoryClickEvent event) {
 		
@@ -58,7 +83,6 @@ public class ClickEvent implements Listener{
 
 				GameRule<Integer> gamerule = (GameRule<Integer>) GameRule.getByName(name);
 				this.editor = player;
-				this.item = currentItem;
 				this.gamerule = gamerule;
 				
 				player.closeInventory();
@@ -76,7 +100,7 @@ public class ClickEvent implements Listener{
 				
 				if(! currentItem.getItemMeta().getDisplayName().equals("§c§lReset all")) return;
 
-				GameruleManager.resetAllGamerule(player);
+				GameruleManager.resetAllGamerule(world);
 				player.sendMessage("§a§lGM §7| §7All gamerules has their §adefault values§7.");
 				player.closeInventory();
 				player.openInventory(GameruleManager.createMenu(player));
@@ -87,18 +111,38 @@ public class ClickEvent implements Listener{
 		
 	}
 	
+	
+	/**
+	 * Return the editor.
+	 * 
+	 * @return editor
+	 * */
 	public static Player getEditor() {	
 		return editor;	
 	}
 	
+	
+	/**
+	 * Remove the editor.
+	 * */
 	public static void removeEditor() {
 		editor = null;
 	}
 	
+	
+	/**
+	 * Return the gamerule.
+	 * 
+	 * @return gamerule
+	 * */
 	public static GameRule<Integer> getGamerule(){
 		return gamerule;
 	}
 	
+	
+	/**
+	 * Remove the gamerule.
+	 * */
 	public static void removeGamerule() {
 		gamerule = null;
 	}

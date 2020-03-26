@@ -12,15 +12,40 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+/**
+ * 
+ * Event
+ * Trigger when a player has wrote on chat.
+ * 
+ * @author BoBsmil3Y
+ * @version 1.0
+ */
 
 public class ChatEvent implements Listener{
 	
+	
+	/**
+	 * Instance of the plugin.
+	 * */
 	private final Main plugin;
 	
+	
+	/**
+	 * Set the instance of the plugin.
+	 * 
+	 * @param plugin
+	 * */
 	public ChatEvent(Main plugin) {
         this.plugin = plugin;
     }
 	
+	
+	/**
+	 * Called functions depends on the message sended.
+	 * Used to get the player input to modify integer gamerule value. 
+	 * 
+	 * @param event
+	 * */
 	@EventHandler
 	public void onChatEvent (AsyncPlayerChatEvent event) {
 		Player player = event.getPlayer();

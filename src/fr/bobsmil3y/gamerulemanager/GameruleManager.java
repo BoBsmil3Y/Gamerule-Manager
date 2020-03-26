@@ -21,9 +21,27 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * 
+ * Class called when /gmanager command is executed.
+ * Used to manage items and main menu.
+ * 
+ * @author BoBsmil3Y
+ * @version 1.0
+ */
 
 public class GameruleManager implements CommandExecutor {
 	
+	/**
+	 * Checks the player and open him an inventory with items.
+	 * 
+	 * @param sender
+	 * @param command
+	 * @param label
+	 * @param args
+	 * 
+	 * @return ItemStack
+	 * */
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
@@ -45,7 +63,13 @@ public class GameruleManager implements CommandExecutor {
 	}
 	
 	
-	
+	/**
+	 * Create the menu with all gamerule items.
+	 * 
+	 * @param player
+	 * 
+	 * @return ItemStack
+	 * */
 	public static Inventory createMenu(Player player) {
 		
 		Inventory inventory = Bukkit.createInventory(null, 45, ChatColor.DARK_GRAY + "Gamerule Manager");
@@ -58,14 +82,11 @@ public class GameruleManager implements CommandExecutor {
 			gamerule = GameRule.getByName(name);
 			String type = gamerule.getType().toString();
 			
-			
-			// If the GameRule is a Boolean type
 			if(type.equals("class java.lang.Boolean")) {
 				
 				Boolean defaultValue = (Boolean) player.getWorld().getGameRuleDefault(gamerule);
 				inventory.addItem(createItemBoolean(player, gamerule, name, defaultValue));
 				
-			// If the GameRule is a Integer type
 			} else if (type.equals("class java.lang.Integer")) {
 				
 				int defaultValue = (int) player.getWorld().getGameRuleDefault(gamerule);
@@ -82,6 +103,16 @@ public class GameruleManager implements CommandExecutor {
 	}
 	
 	
+	/**
+	 * Create the item for Boolean type gamerule.
+	 * 
+	 * @param player
+	 * @param gamerule
+	 * @param name
+	 * @param defaultValue
+	 * 
+	 * @return ItemStack
+	 * */
 	public static ItemStack createItemBoolean(Player player, GameRule<?> gamerule, String name, Boolean defaultValue) {
 		
 		boolean bool = (boolean) player.getWorld().getGameRuleValue(gamerule);
@@ -109,6 +140,16 @@ public class GameruleManager implements CommandExecutor {
 	}
 	
 	
+	/**
+	 * Create the item for integer type gamerule.
+	 * 
+	 * @param player
+	 * @param gamerule
+	 * @param name
+	 * @param defaultValue
+	 * 
+	 * @return ItemStack
+	 * */
 	public static ItemStack createItemInteger(Player player, GameRule<?> gamerule, String name, int defaultValue) {
 		
 		int integer = (int) player.getWorld().getGameRuleValue(gamerule);
@@ -127,13 +168,22 @@ public class GameruleManager implements CommandExecutor {
 	}
 	
 	
-	public static ItemStack changeLoreBoolean(ItemStack item, Boolean bool, Boolean defaultValue) {
+	/**
+	 * Change the lore of an item with a boolean gamerule value assigned.
+	 * 
+	 * @param item
+	 * @param value
+	 * @param defaultValue
+	 * 
+	 * @return ItemStack
+	 * */
+	public static ItemStack changeLoreBoolean(ItemStack item, Boolean value, Boolean defaultValue) {
 		ItemMeta meta = item.getItemMeta();
 		
 		ArrayList<String> lore = new ArrayList<String>();
 		List<String> loreList = null;
 
-		if(!bool) {
+		if(!value) {
 			loreList = Arrays.asList("§r ", "§7§lCurrent value : §a§ltrue", "§r ", "§7§lDefault value : §7" + defaultValue, "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
 			meta.addEnchant(Enchantment.SILK_TOUCH, 1, true);
 			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
@@ -150,6 +200,11 @@ public class GameruleManager implements CommandExecutor {
 	}
 	
 	
+	/**
+	 * Create the exit item.
+	 * 
+	 * @return item
+	 * */
 	public static ItemStack createItemExit() {
 		
 		ArrayList<String> lore = new ArrayList<String>();
@@ -167,6 +222,11 @@ public class GameruleManager implements CommandExecutor {
 	}
 	
 	
+	/**
+	 * Create the reset item.
+	 * 
+	 * @return item
+	 * */
 	public static ItemStack createItemReset() {
 		
 		ArrayList<String> lore = new ArrayList<String>();
@@ -184,10 +244,14 @@ public class GameruleManager implements CommandExecutor {
 	}
 	
 	
-	public static void resetAllGamerule(Player player) {
+	/**
+	 * Reset all the gamerule value to default.
+	 * 
+	 * @param world
+	 * */
+	public static void resetAllGamerule(World world) {
 		
-		World world = player.getWorld();
-		String gamerulesNames[] = player.getWorld().getGameRules();
+		String gamerulesNames[] = world.getGameRules();
 		
 		for(String name : gamerulesNames) {			
 			
@@ -196,22 +260,22 @@ public class GameruleManager implements CommandExecutor {
 			if(type.equals("class java.lang.Boolean")) {
 				
 				GameRule<Boolean> gamerule = (GameRule<Boolean>) GameRule.getByName(name);
-				Boolean defaultValue = (Boolean) player.getWorld().getGameRuleDefault(gamerule);
+				Boolean defaultValue = (Boolean) world.getGameRuleDefault(gamerule);
 				
 				world.setGameRule(gamerule, defaultValue);
 				
 			} else if (type.equals("class java.lang.Integer")) {
 				
 				GameRule<Integer> gamerule = (GameRule<Integer>) GameRule.getByName(name);
-				int defaultValue = (int) player.getWorld().getGameRuleDefault(gamerule);
+				int defaultValue = (int) world.getGameRuleDefault(gamerule);
 				
 				world.setGameRule(gamerule, defaultValue);
 				
 			}
 			
-			
 		}
 		
 	}
+	
 	
 }

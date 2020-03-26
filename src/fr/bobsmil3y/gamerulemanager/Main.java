@@ -11,7 +11,7 @@ public class Main extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		
-        getCommand("gmanager").setExecutor(new GameruleManager());
+        getCommand("gamerulemanager").setExecutor(new GameruleManager());
         getServer().getPluginManager().registerEvents(new ClickEvent(), this);
         getServer().getPluginManager().registerEvents(new ChatEvent(this), this);
 	

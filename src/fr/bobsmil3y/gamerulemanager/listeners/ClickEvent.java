@@ -16,11 +16,13 @@ import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 
 public class ClickEvent implements Listener{
-
+	
 	private static Player editor;
+	@SuppressWarnings("unused")
 	private static ItemStack item;
 	private static GameRule<Integer> gamerule;
 	
+	@SuppressWarnings("unchecked")
 	@EventHandler
 	public void onClickEvent (InventoryClickEvent event) {
 		
@@ -42,10 +44,8 @@ public class ClickEvent implements Listener{
 			
 			
 			if(currentItem.getType() == Material.LEVER ) {
-				// Boolean
-				GameRule<Boolean> gamerule = null;
-				gamerule = (GameRule<Boolean>) gamerule.getByName(name);
-
+				
+				GameRule<Boolean> gamerule = (GameRule<Boolean>) GameRule.getByName(name);
 				Boolean value = world.getGameRuleValue(gamerule);
 				Boolean defaultValue = world.getGameRuleDefault(gamerule);
 				
@@ -53,11 +53,10 @@ public class ClickEvent implements Listener{
 				ItemStack itemChanged = GameruleManager.changeLoreBoolean(currentItem, value, defaultValue);
 
 				inv.setItem(event.getSlot(), itemChanged);
-			} else if(currentItem.getType() == Material.PAPER ) {
-				// Integer
 				
-				GameRule<Integer> gamerule = null;
-				gamerule = (GameRule<Integer>) gamerule.getByName(name);
+			} else if(currentItem.getType() == Material.PAPER ) {
+
+				GameRule<Integer> gamerule = (GameRule<Integer>) GameRule.getByName(name);
 				this.editor = player;
 				this.item = currentItem;
 				this.gamerule = gamerule;

@@ -24,7 +24,6 @@ public class GameruleManager implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		
-		// If sender is console -> error messages
 		if(!(sender instanceof Player)) {
 			ConsoleCommandSender console = sender.getServer().getConsoleSender();
 			console.sendMessage(ChatColor.RED + "Command has to be perform by a player");
@@ -33,7 +32,6 @@ public class GameruleManager implements CommandExecutor {
 		
 		Player player = (Player) sender;
 		
-		// If sender is console  -> error messages
 		if(!player.hasPermission(command.getPermission())) {
 			return false;
 		}
@@ -42,6 +40,8 @@ public class GameruleManager implements CommandExecutor {
 		
 		return true;
 	}
+	
+	
 	
 	public static Inventory createMenu(Player player) {
 		
@@ -52,7 +52,7 @@ public class GameruleManager implements CommandExecutor {
 		
 		for(String name : gamerulesNames) {			
 			
-			gamerule = gamerule.getByName(name);
+			gamerule = GameRule.getByName(name);
 			String type = gamerule.getType().toString();
 			
 			
@@ -74,6 +74,7 @@ public class GameruleManager implements CommandExecutor {
 		
 		return inventory;
 	}
+	
 	
 	public static ItemStack createItemBoolean(Player player, GameRule<?> gamerule, String name, Boolean defaultValue) {
 		
@@ -97,6 +98,7 @@ public class GameruleManager implements CommandExecutor {
 		return item;
 	}
 	
+	
 	public static ItemStack createItemInteger(Player player, GameRule<?> gamerule, String name, int defaultValue) {
 		
 		int integer = (int) player.getWorld().getGameRuleValue(gamerule);
@@ -113,6 +115,7 @@ public class GameruleManager implements CommandExecutor {
 		
 		return item;
 	}
+	
 	
 	public static ItemStack changeLoreBoolean(ItemStack item, Boolean bool, Boolean defaultValue) {
 		ItemMeta meta = item.getItemMeta();

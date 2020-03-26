@@ -39,9 +39,17 @@ public class ChatEvent implements Listener{
 				
 				String message = event.getMessage();
 				if(message.equals("exit")) {
-					player.sendMessage("§cEdit cancel");
+					player.sendMessage("§a§lGM §7| §7Edit mode §acancel§7.");
 					ClickEvent.removeEditor();
 					ClickEvent.removeGamerule();
+					new BukkitRunnable() {
+				        
+			            @Override
+			            public void run() {
+			            	player.openInventory(GameruleManager.createMenu(player));
+			            }
+			            
+			        }.runTaskLater(this.plugin, 5);
 					return;
 				}
 				int value = Integer.parseInt(message);
@@ -51,7 +59,7 @@ public class ChatEvent implements Listener{
 				world.setGameRule(gamerule, value);
 				ClickEvent.removeEditor();
 				ClickEvent.removeGamerule();
-				player.sendMessage("§aValue changed with succes !");
+				player.sendMessage("§a§lGM §7| §7Value §achanged §7with succes !");
 				
 				new BukkitRunnable() {
 			        
@@ -66,7 +74,7 @@ public class ChatEvent implements Listener{
 			} catch (NumberFormatException e) {
 				
 				System.out.println(e);
-				player.sendMessage("§cYou have to put a correct number ! Only integer is allow.");
+				player.sendMessage("§c§lGM §7| §7You have to put a §ccorrect number§7 ! Only §cinteger§7 is allow.");
 				
 			}
 

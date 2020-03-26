@@ -21,7 +21,6 @@ public class ClickEvent implements Listener{
 	private static ItemStack item;
 	private static GameRule<Integer> gamerule;
 	
-	@SuppressWarnings("unchecked")
 	@EventHandler
 	public void onClickEvent (InventoryClickEvent event) {
 		System.out.println("Listener fired");
@@ -61,17 +60,14 @@ public class ClickEvent implements Listener{
 				GameRule<Integer> gamerule = null;
 				gamerule = (GameRule<Integer>) gamerule.getByName(name);
 				this.editor = player;
-				this.item = item;
+				this.item = currentItem;
 				this.gamerule = gamerule;
 				
 				player.closeInventory();
 				
-				player.sendMessage(ChatColor.GRAY + "Default value : " + ChatColor.AQUA + world.getGameRuleDefault(gamerule));
-				player.sendMessage(ChatColor.GRAY + "Actual value : " + ChatColor.AQUA + world.getGameRuleValue(gamerule));
-				player.sendMessage(ChatColor.GRAY + "Write the value you want to put. Type 'exit' if you want to cancel.");
-				
-				
-				
+				player.sendMessage("§7Default value : §b" + world.getGameRuleDefault(gamerule) + "§r   §8|   §7Actual value : §b" + world.getGameRuleValue(gamerule));
+				player.sendMessage("§aWrite §7the §avalue §7you want to set. Type '§cexit§7' to cancel.");
+
 			}
 		}
 		

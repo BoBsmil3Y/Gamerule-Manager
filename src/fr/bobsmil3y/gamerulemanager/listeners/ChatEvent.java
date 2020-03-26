@@ -52,6 +52,7 @@ public class ChatEvent implements Listener{
 			        }.runTaskLater(this.plugin, 5);
 					return;
 				}
+				
 				int value = Integer.parseInt(message);
 
 				GameRule<Integer> gamerule = ClickEvent.getGamerule();
@@ -77,10 +78,8 @@ public class ChatEvent implements Listener{
 				player.sendMessage("§c§lGM §7| §7You have to put a §ccorrect number§7 ! Only §cinteger§7 is allow.");
 				
 			}
-
 			
 		}
-		
 		
 	}
 	

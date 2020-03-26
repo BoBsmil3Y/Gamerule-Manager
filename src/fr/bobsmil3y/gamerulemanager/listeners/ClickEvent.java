@@ -23,7 +23,6 @@ public class ClickEvent implements Listener{
 	
 	@EventHandler
 	public void onClickEvent (InventoryClickEvent event) {
-		System.out.println("Listener fired");
 		
 		Player player = (Player) event.getWhoClicked();
 		Inventory inv = event.getInventory();
@@ -42,7 +41,7 @@ public class ClickEvent implements Listener{
 			String name = currentItem.getItemMeta().getDisplayName().substring(4);
 			
 			
-			if(currentItem.getType() == Material.TRIPWIRE_HOOK ) {
+			if(currentItem.getType() == Material.LEVER ) {
 				// Boolean
 				GameRule<Boolean> gamerule = null;
 				gamerule = (GameRule<Boolean>) gamerule.getByName(name);
@@ -68,7 +67,23 @@ public class ClickEvent implements Listener{
 				player.sendMessage("§7Default value : §b" + world.getGameRuleDefault(gamerule) + "§r   §8|   §7Actual value : §b" + world.getGameRuleValue(gamerule));
 				player.sendMessage("§aWrite §7the §avalue §7you want to set. Type '§cexit§7' to cancel.");
 
+			} else if(currentItem.getType() == Material.SPRUCE_DOOR) {
+				
+				if(currentItem.getItemMeta().getDisplayName().equals("§c§lExit")) player.closeInventory();
+				
 			}
+			
+			else if(currentItem.getType() == Material.REDSTONE) {
+				
+				if(! currentItem.getItemMeta().getDisplayName().equals("§c§lReset all")) return;
+
+				GameruleManager.resetAllGamerule(player);
+				player.sendMessage("§a§lGM §7| §7All gamerules has their §adefault values§7.");
+				player.closeInventory();
+				player.openInventory(GameruleManager.createMenu(player));
+				
+			}
+
 		}
 		
 	}

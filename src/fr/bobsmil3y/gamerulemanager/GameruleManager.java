@@ -5,18 +5,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.annotation.Nonnull;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Silverfish;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import net.minecraft.server.v1_15_R1.EnchantmentSilkTouch;
 
 
 public class GameruleManager implements CommandExecutor {
@@ -72,6 +80,9 @@ public class GameruleManager implements CommandExecutor {
 						
 		}
 		
+		inventory.setItem((inventory.getSize() - 1), createItemExit());
+		inventory.setItem((inventory.getSize() - 2), createItemReset());
+		
 		return inventory;
 	}
 	
@@ -82,18 +93,22 @@ public class GameruleManager implements CommandExecutor {
 		
 		ArrayList<String> lore = new ArrayList<String>();
 		List<String> loreListBool = null;
+		ItemStack item = new ItemStack(Material.LEVER, 1);
+		ItemMeta meta = item.getItemMeta();
 		
 		if(bool) {
 			loreListBool = Arrays.asList("§r ", "§7§lCurrent value : §a§ltrue", "§r ", "§7§lDefault value : §7" + defaultValue, "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
-		} else loreListBool = Arrays.asList("§r ", "§7§lCurrent value : §c§lfalse", "§r ", "§7§lDefault value : §7" + defaultValue, "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
+			meta.addEnchant(Enchantment.SILK_TOUCH, 1, true);
+			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		} else {
+			loreListBool = Arrays.asList("§r ", "§7§lCurrent value : §c§lfalse", "§r ", "§7§lDefault value : §7" + defaultValue, "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
+		}
 		
 		lore.addAll(loreListBool);
-		
-		ItemStack item = new ItemStack(Material.TRIPWIRE_HOOK, 1);
-		ItemMeta meta = item.getItemMeta();
 		meta.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + name);
 		meta.setLore(lore);
 		item.setItemMeta(meta);
+		
 		
 		return item;
 	}
@@ -122,17 +137,86 @@ public class GameruleManager implements CommandExecutor {
 		
 		ArrayList<String> lore = new ArrayList<String>();
 		List<String> loreList = null;
-		
+
 		if(!bool) {
 			loreList = Arrays.asList("§r ", "§7§lCurrent value : §a§ltrue", "§r ", "§7§lDefault value : §7" + defaultValue, "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
-		} else loreList = Arrays.asList("§r ", "§7§lCurrent value : §c§lfalse", "§r ", "§7§lDefault value : §7" + defaultValue, "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
+			meta.addEnchant(Enchantment.SILK_TOUCH, 1, true);
+			meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+		} else {
+			loreList = Arrays.asList("§r ", "§7§lCurrent value : §c§lfalse", "§r ", "§7§lDefault value : §7" + defaultValue, "§r ", "§7Click to change the value to", "§7true or false.", "§r ");
+			if (meta.hasEnchant(Enchantment.SILK_TOUCH)) meta.removeEnchant(Enchantment.SILK_TOUCH);
+		}
 		
 		lore.addAll(loreList);
-		
 		meta.setLore(lore);
 		item.setItemMeta(meta);
 
 		return item;
+	}
+	
+	
+	public static ItemStack createItemExit() {
+		
+		ArrayList<String> lore = new ArrayList<String>();
+		ItemStack item = new ItemStack(Material.SPRUCE_DOOR, 1);
+		ItemMeta meta = item.getItemMeta();
+		
+		List<String> loreList = Arrays.asList("§r ", "§7Click to close the menu", "§r ");
+
+		lore.addAll(loreList);
+		meta.setDisplayName("§c§lExit");
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+		
+		return item;
+	}
+	
+	
+	public static ItemStack createItemReset() {
+		
+		ArrayList<String> lore = new ArrayList<String>();
+		ItemStack item = new ItemStack(Material.REDSTONE, 1);
+		ItemMeta meta = item.getItemMeta();
+		
+		List<String> loreList = Arrays.asList("§r ", "§7Allow you to reset all the", "§7gamerule value to the default.", "§r ");
+
+		lore.addAll(loreList);
+		meta.setDisplayName("§c§lReset all");
+		meta.setLore(lore);
+		item.setItemMeta(meta);
+		
+		return item;
+	}
+	
+	
+	public static void resetAllGamerule(Player player) {
+		
+		World world = player.getWorld();
+		String gamerulesNames[] = player.getWorld().getGameRules();
+		
+		for(String name : gamerulesNames) {			
+			
+			String type = GameRule.getByName(name).getType().toString();
+			
+			if(type.equals("class java.lang.Boolean")) {
+				
+				GameRule<Boolean> gamerule = (GameRule<Boolean>) GameRule.getByName(name);
+				Boolean defaultValue = (Boolean) player.getWorld().getGameRuleDefault(gamerule);
+				
+				world.setGameRule(gamerule, defaultValue);
+				
+			} else if (type.equals("class java.lang.Integer")) {
+				
+				GameRule<Integer> gamerule = (GameRule<Integer>) GameRule.getByName(name);
+				int defaultValue = (int) player.getWorld().getGameRuleDefault(gamerule);
+				
+				world.setGameRule(gamerule, defaultValue);
+				
+			}
+			
+			
+		}
+		
 	}
 	
 }
